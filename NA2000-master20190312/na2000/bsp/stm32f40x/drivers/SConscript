@@ -1,0 +1,42 @@
+Import('RTT_ROOT')
+Import('rtconfig')
+from building import *
+
+cwd     = os.path.join(str(Dir('#')), 'drivers')
+
+# add the general drivers.
+src = Split("""
+board.c
+bxcan.c
+stm32f4xx_it.c
+interface.c
+usart.c
+spi_hard.c
+spi_sd.c
+stm32f20x_40x_spi.c
+flash_if.c
+stm32f4_rtc.c
+i2c_gpio.c
+i2c_driver.c
+""")
+#src	= Glob('*.c')
+
+# add Ethernet drivers.
+if GetDepend('RT_USING_LWIP'):
+    src += ['stm32f4xx_eth.c']
+
+# add gpio drivers.
+if GetDepend('RT_USING_PIN'):
+    src += ['gpio.c']
+
+	# add USB Host driver.
+if GetDepend('RT_USING_USB_HOST') == True:
+	src+= ['stm32f4xx_hcd.c']
+	src+= ['usb_bsp.c']
+	
+CPPPATH = [cwd]
+
+group = DefineGroup('Drivers', src, depend = [''], CPPPATH = CPPPATH)
+
+Return('group')
+

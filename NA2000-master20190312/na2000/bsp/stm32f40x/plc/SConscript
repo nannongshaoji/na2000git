@@ -1,0 +1,13 @@
+Import('RTT_ROOT')
+Import('rtconfig')
+from building import *
+
+cwd     = os.path.join(str(Dir('#')), 'plc')
+src	= Glob('*.c')
+CPPPATH = [cwd, str(Dir('#'))]
+LIBPATH = [cwd]
+LIBS = ['app']
+
+group = DefineGroup('Plc', src, depend = [''], CPPPATH = CPPPATH, LIBS=LIBS,LIBPATH=LIBPATH)
+
+Return('group')
